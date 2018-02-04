@@ -2,7 +2,7 @@
 import './App.css'
 
 import React, { Component } from 'react';
-import { Route, BrowserRouter } from 'react-router-dom'
+import { Route} from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import ListBooks from "./ListBooks"
 import SearchBooks from "./SearchBooks"
@@ -13,7 +13,6 @@ class BooksApp extends Component {
     super(props)
     
   this.state = {
-    showSearchPage: false,
     query:'',
     books:[]
     }
@@ -73,22 +72,18 @@ class BooksApp extends Component {
             </div>
           </div>
         )}
-        <BrowserRouter>
         <Route exact path="/" render={() => (
           <ListBooks 
             books={this.state.books}
             onChangeBookShelf={this.onChangeBookShelf}
           />
           )}/>
-        </BrowserRouter>
-        <BrowserRouter>
           <Route path="/search" render={() => (
             <SearchBooks
               books={this.state.books}
               onChangeBookShelf={this.onChangeBookShelf}
             />
           )}/>
-        </BrowserRouter>
       </div>
       );
     }
