@@ -3,41 +3,41 @@ import './App.css'
 import PropTypes from 'prop-types'
 
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom'
+import { Route, BrowserRouter } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import sortBy from 'sort-by'
 import ListBooks from "./ListBooks"
 import SearchBooks from "./SearchBooks"
 
 class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
+
+  constructor(props) {  
+    super(props)
+    
+  this.state = {
     showSearchPage: false,
     query:'',
-    books: [],
+    books:[]
+    }
   }
 
   componentDidMount() {
-  	BooksAPI.getAll().then(books => {
+    BooksAPI.getAll().then(books => {
       this.setState({
-    	  books,
-		    loading: false
+        books,
+        loading: false
       })
-  	})
+    })
   }
-onChangeBookShelf = (book, shelf, newBookInfo) => {
+
+  onChangeBookShelf = (book, shelf, newBookInfo) => {
     this.setState({
       loading: true
     })
     BooksAPI.update(book, shelf).then(books => {
       books = [].concat(
         books.currentlyReading,
-      	books.wantToRead,
+        books.wantToRead,
         books.read
       )
       this.setState(state => {
@@ -63,55 +63,36 @@ onChangeBookShelf = (book, shelf, newBookInfo) => {
     })
   }
     
-  removeBook = (book) => {
-    this.setState((state) => ({
-      contacts: state.books.filter((c) => c.id !== book.id)
-    }))
-
-    BooksAPI.remove(book)
-  }
-
   render() {
-
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-            <SearchBooks 
-              books={this.state.books}
-              onChangeBookShelf={this.onChangeBookShelf}
-            />
-            ) : (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
-            <div className="list-books-content">
-              <div>
-                    <ListBooks 
-                      title="Currently Reading"
-                      books={this.state.books.filter(b => b.shelf === "currentlyReading")}
-                      onChangeBookShelf={this.onChangeBookShelf}
-                    />
-                    <ListBooks 
-                      title="Want to Read"
-                      books={this.state.books.filter(b => b.shelf === "wantToRead")}
-                      onChangeBookShelf={this.onChangeBookShelf}
-                    />
-                    <ListBooks 
-                      title="Read"
-                      books={this.state.books.filter(b => b.shelf === "read")}
-                      onChangeBookShelf={this.onChangeBookShelf}
-                    />
+        {this.state.loading && (
+          <div className="loading-wrapper">
+            <div className="body-loading">
+              <div className="loading">
+                <strong>Please wait</strong>
               </div>
-            </div>
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
             </div>
           </div>
         )}
+        <BrowserRouter>
+        <Route exact path="/" render={() => (
+          <ListBooks 
+            books={this.state.books}
+            onChangeBookShelf={this.onChangeBookShelf}
+          />
+          )}/>
+        </BrowserRouter>
+        <BrowserRouter>
+          <Route path="/search" render={() => (
+            <SearchBooks
+              books={this.state.books}
+              onChangeBookShelf={this.onChangeBookShelf}
+            />
+          )}/>
+        </BrowserRouter>
       </div>
-    )
+      );
+    }
   }
-}
-
 export default BooksApp

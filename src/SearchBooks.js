@@ -1,34 +1,31 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
+import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
 import ListBooks from './ListBooks'
+import Book from './Book'
+
 
 class SearchBooks extends Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
     onChangeBookShelf: PropTypes.func.isRequired
-
   }
 
-  state = {
-    query: ''
-  }
-
-
- constructor(props) {
-    super(props)
-  	this.state = {
-      error: null,
+  constructor(props) {
+  super(props)
+    this.state = {
       loading: false,
       searchResult: []
     }
   }
+
   updateSearch = (query) => {
-  	if (query) {
-      // Search all books based on title or author name
+
+    if (query=='') { // If no search is specified. We bring all books
+    } else {
       BooksAPI.search(query).then(books => {
         if (!Array.isArray(books)) {
           this.setState({
@@ -36,10 +33,8 @@ class SearchBooks extends Component {
           })
           return
         }
-        // Concat all current books shelved
+        
         this.setState({
-          // Compare all books found in the search and current books shelved to
-          // Update the shelf value in the book if is already stored
           searchResult: books.map(book => {
             const found = this.props.books.find(b => book.id === b.id)
             if (found)
@@ -51,6 +46,7 @@ class SearchBooks extends Component {
       	})
       })
     }
+
   }
   removeBook = (book) => {
     this.setState((state) => ({
@@ -70,47 +66,46 @@ class SearchBooks extends Component {
     }))
     this.props.onChangeBookShelf(found, shelf)
   }
+  
   componentDidMount() {
    	document.querySelector("#search").focus()
   }
+
 
   render() {
     const { books, onDeleteBook, onChangeBookShelf } = this.props;
     const { query } = this.state;
 
     return (
-        <div className="search-books">
-                <div className="search-books-bar">
-                  <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
-                  <div className="search-books-input-wrapper">
-                    {/*
-                      NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                      You can find these search terms here:
-                      https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
 
-                      However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                      you don't find a specific author or title. Every search is limited by search terms.
-                    */
-                    
-                    }
-                <input
-                className='search-contacts'
-                type='text'
-                placeholder='Search by title or author'
-                onChange={(event) => this.updateQuery(event.target.value)}
-              />
-
-                  </div>
-                </div>
-                <div className="search-books-results">
-                  <ol className="books-grid"></ol>
-                    <ListBooks  
-                      onDeleteBook={this.removeBook}
-                      books={this.state.books}
-                      onChangeBookShelf={this.state.onChangeBookShelf}
-                    />
-                </div>
-              </div>
+     <div className="search-books">
+        <div className="search-books-bar">
+          <Link className="close-search" to="/">Close</Link>
+          <div className="search-books-input-wrapper">
+              <input
+         		    id="search"
+        		    type="text"
+        		    placeholder="Search by title or author"
+        		    onChange={(e) => this.updateSearch(e.target.value)}/>
+          </div>
+        </div>
+        <div className="search-books-results">
+          <ol className="books-grid">
+	          { this.state.searchResult.length > 0 && (this.state.searchResult.map((book, index) => (
+              <li key={ index }>
+                        <Book
+                          id={book.id}
+                          title={book.title}
+                          imageLinks={book.imageLinks}
+                          shelf={book.shelf}
+                          authors={book.authors}
+                          onChangeBookShelf={onChangeBookShelf}
+                        />
+              </li>
+            ))) }
+          </ol>
+        </div>
+      </div>
     )
   }
 }
