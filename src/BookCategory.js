@@ -1,9 +1,5 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import React from 'react';
 import PropTypes from 'prop-types'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
-import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 
 function BookCategory (props) {

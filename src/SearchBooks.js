@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
 import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
-import ListBooks from './ListBooks'
 import Book from './Book'
 
 
@@ -24,8 +21,7 @@ class SearchBooks extends Component {
 
   updateSearch = (query) => {
 
-    if (query=='') { // If no search is specified. We bring all books
-    } else {
+    if (query) {
       BooksAPI.search(query).then(books => {
         if (!Array.isArray(books)) {
           this.setState({
@@ -43,17 +39,12 @@ class SearchBooks extends Component {
               book.shelf = 'none'
             return book
           })
-      	})
+        })
       })
     }
 
   }
-  removeBook = (book) => {
-    this.setState((state) => ({
-      contacts: state.books.filter((c) => c.id !== book.id)
-    }))
-  }
-
+  
   onChangeBookShelf = (book, shelf) => {
     const found = this.state.searchResult.find(b => book.id === b.id)
     this.setState(state => ({
@@ -68,13 +59,11 @@ class SearchBooks extends Component {
   }
   
   componentDidMount() {
-   	document.querySelector("#search").focus()
+    document.querySelector("#search").focus()
   }
 
-
   render() {
-    const { books, onDeleteBook, onChangeBookShelf } = this.props;
-    const { query } = this.state;
+    const { onChangeBookShelf } = this.props;
 
     return (
 
@@ -82,25 +71,25 @@ class SearchBooks extends Component {
         <div className="search-books-bar">
           <Link className="close-search" to="/">Close</Link>
           <div className="search-books-input-wrapper">
-              <input
-         		    id="search"
-        		    type="text"
-        		    placeholder="Search by title or author"
-        		    onChange={(e) => this.updateSearch(e.target.value)}/>
+            <input
+              id="search"
+              type="text"
+              placeholder="Search by title or author"
+              onChange={(e) => this.updateSearch(e.target.value)}/>
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-	          { this.state.searchResult.length > 0 && (this.state.searchResult.map((book, index) => (
+            { this.state.searchResult.length > 0 && (this.state.searchResult.map((book, index) => (
               <li key={ index }>
-                        <Book
-                          id={book.id}
-                          title={book.title}
-                          imageLinks={book.imageLinks}
-                          shelf={book.shelf}
-                          authors={book.authors}
-                          onChangeBookShelf={onChangeBookShelf}
-                        />
+                <Book
+                  id={book.id}
+                  title={book.title}
+                  imageLinks={book.imageLinks}
+                  shelf={book.shelf}
+                  authors={book.authors}
+                  onChangeBookShelf={onChangeBookShelf}
+                />
               </li>
             ))) }
           </ol>

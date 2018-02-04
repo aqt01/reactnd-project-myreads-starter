@@ -1,9 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
-import * as BooksAPI from './BooksAPI'
+import React from 'react';
 
 function Book (props) {
   const { id, title, imageLinks, shelf, authors, onChangeBookShelf } = props;
@@ -35,7 +31,7 @@ function Book (props) {
                 </div>
               </li>
     )
-
+}
 Book.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -44,5 +40,4 @@ Book.propTypes = {
     authors: PropTypes.array.isRequired,
     onChangeBookShelf: PropTypes.array.isRequired,
   }
-}
 export default Book 

@@ -1,15 +1,13 @@
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
-import PropTypes from 'prop-types'
 
 import React, { Component } from 'react';
 import { Route, BrowserRouter } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
-import sortBy from 'sort-by'
 import ListBooks from "./ListBooks"
 import SearchBooks from "./SearchBooks"
 
-class BooksApp extends React.Component {
+class BooksApp extends Component {
 
   constructor(props) {  
     super(props)
