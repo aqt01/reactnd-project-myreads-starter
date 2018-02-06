@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import Book from './Book'
 
+const placeholderImage = 'http://via.placeholder.com/128x193';
+
 function BookCategory (props) {
   const { title, books, onChangeBookShelf } = props;
 
@@ -10,11 +12,12 @@ function BookCategory (props) {
                   <h2 className="bookshelf-title"> { title } </h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                    {books.length > 0 && (books.map((book, index) => (
+                    {books.length > 0 && (books.map((book) => (
                         <Book
                           id={book.id}
+                          key={book.id}
                           title={book.title}
-                          imageLinks={book.imageLinks}
+                          thumbnail={ (book.imageLinks || {} ).thumbnail || placeholderImage}
                           shelf={book.shelf}
                           authors={book.authors}
                           onChangeBookShelf={onChangeBookShelf}

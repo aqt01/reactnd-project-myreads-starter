@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 
+const placeholderImage = 'http://via.placeholder.com/128x193';
 
 class SearchBooks extends Component {
   static propTypes = {
@@ -64,7 +65,7 @@ class SearchBooks extends Component {
 
   render() {
     const { onChangeBookShelf } = this.props;
-
+    console.log(this.state)
     return (
 
      <div className="search-books">
@@ -75,22 +76,21 @@ class SearchBooks extends Component {
               id="search"
               type="text"
               placeholder="Search by title or author"
-              onChange={(e) => this.updateSearch(e.target.value)}/>
+              onChange={(e) => this.updateSearch(e.target.value)}
+            />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            { this.state.searchResult.length > 0 && (this.state.searchResult.map((book, index) => (
-              <li key={ index }>
-                <Book
-                  id={book.id}
-                  title={book.title}
-                  imageLinks={book.imageLinks}
-                  shelf={book.shelf}
-                  authors={book.authors}
-                  onChangeBookShelf={onChangeBookShelf}
-                />
-              </li>
+            { this.state.searchResult.length > 0 && (this.state.searchResult.map((book) => (              
+              <Book
+                id={book.id}
+                key={book.id}
+                title={book.title}
+                thumbnail={ (book.imageLinks || {} ).thumbnail || placeholderImage}
+                shelf={book.shelf}
+                authors={book.authors}
+                onChangeBookShelf={onChangeBookShelf} />              
             ))) }
           </ol>
         </div>
