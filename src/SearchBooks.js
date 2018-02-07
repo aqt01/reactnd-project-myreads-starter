@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
 
-const placeholderImage = 'http://via.placeholder.com/128x193';
 
 class SearchBooks extends Component {
   static propTypes = {
@@ -64,8 +63,6 @@ class SearchBooks extends Component {
   }
 
   render() {
-    const { onChangeBookShelf } = this.props;
-    console.log(this.state)
     return (
 
      <div className="search-books">
@@ -87,10 +84,10 @@ class SearchBooks extends Component {
                 id={book.id}
                 key={book.id}
                 title={book.title}
-                thumbnail={ (book.imageLinks || {} ).thumbnail || placeholderImage}
+                imageLinks={book.imageLinks}
                 shelf={book.shelf}
                 authors={book.authors}
-                onChangeBookShelf={onChangeBookShelf} />              
+                onChangeBookShelf={this.onChangeBookShelf} />              
             ))) }
           </ol>
         </div>

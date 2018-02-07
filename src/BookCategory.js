@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import Book from './Book'
 
-const placeholderImage = 'http://via.placeholder.com/128x193';
 
 function BookCategory (props) {
   const { title, books, onChangeBookShelf } = props;
@@ -17,7 +16,7 @@ function BookCategory (props) {
                           id={book.id}
                           key={book.id}
                           title={book.title}
-                          thumbnail={ (book.imageLinks || {} ).thumbnail || placeholderImage}
+                          imageLinks={book.imageLinks}
                           shelf={book.shelf}
                           authors={book.authors}
                           onChangeBookShelf={onChangeBookShelf}

@@ -3,14 +3,13 @@ import React from 'react';
 
 
 function Book (props) {
-  const { id, title, thumbnail, shelf, authors, onChangeBookShelf } = props;
-  console.log(thumbnail)
-
+  const { id, title, imageLinks, shelf, authors, onChangeBookShelf } = props;
+  
     return (
             <li>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${ thumbnail }")` }}></div>
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${ imageLinks && imageLinks.thumbnail?`${imageLinks.thumbnail}`:`http://via.placeholder.com/128x193?text=No%20Cover`})` }}></div>
                     <div className="book-shelf-changer"> 
                     <select value={shelf}
                         onChange={(e) => {
@@ -37,9 +36,8 @@ function Book (props) {
 Book.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired,
+    imageLinks: PropTypes.object,
     shelf: PropTypes.string.isRequired,
-    authors: PropTypes.array.isRequired,
     onChangeBookShelf: PropTypes.func.isRequired,
   }
 export default Book 
